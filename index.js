@@ -7,13 +7,13 @@ var methodOverride = require('method-override');
 var errorhandler = require('errorhandler');
 
 var AlertHandler = require('./AlertHandler');
-var routes = require('./Routes/alerts');
+//var routes = require('./Routes/alerts');
 var http = require('http');
 var path = require('path');
 var server = require('mongodb').Server;
 var bodyParser = require('body-parser');
 
-var config = require('./Config');
+//var config = require('./Config');
 var winston = require('winston');
 
 
