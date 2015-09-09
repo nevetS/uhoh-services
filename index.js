@@ -67,6 +67,18 @@ MongoClient.connect(url, function(err, db) {
 //---------------------------//
 //Setup Routing for Express
 //---------------------------//
+//Send an email
+app.post('/mail',function(req, res) {
+   sendEmail(req.body, function(err)  {
+   if (err)
+       res.send(err);
+
+   res.json({ message: 'Email Sent' });
+   });
+
+});
+
+//Get all the data
 app.get('/:collection', function(req, res) { 
    var params = req.params; 
    alertHandler.findAll(req.params.collection, function(error, objs) { 
@@ -82,6 +94,7 @@ app.get('/:collection', function(req, res) {
         });
 });
 
+//Create a new item in the collection
 app.post('/:collection', function(req, res) { 
     var object = req.body;
     var collection = req.params.collection;
@@ -92,6 +105,7 @@ app.post('/:collection', function(req, res) {
 });
 
 
+//Change/update the item in the collection
 app.put('/:collection/:entity', function(req, res) { 
     var params = req.params;
     var entity = params.entity;
@@ -107,6 +121,7 @@ app.put('/:collection/:entity', function(req, res) {
    }
 });
 
+//Get a single item in the collection
 app.get('/:collection/:entity', function(req, res) { 
    var params = req.params;
    var entity = params.entity;
@@ -119,17 +134,6 @@ app.get('/:collection/:entity', function(req, res) {
    } else {
       res.send(400, {error: 'bad url', url: req.url});
    }
-});
-
-//Send an email
-app.post('/mail',function(req, res) {
-   sendEmail(req.body, function(err)  {
-   if (err)
-       res.send(err);
-
-   res.json({ message: 'Email Sent' });
-   });
-
 });
 
 function sendEmail(mailDetails){
@@ -163,43 +167,6 @@ function sendEmail(mailDetails){
  });
 
 }
-
-//---------------------------//
-//Tail the alerts.json file
-//write the changes to mongo
-//---------------------------//
-//Tail the alerts-json file and create the new alerts
-var Tail = require('node.tail');
-var fs = require('fs');
-
-var fileToTail = "alerts.json";
-var lineSeparator= "]}},";
-var sleepDuration = 1000;
-
-var tail = new Tail(fileToTail,{sep: lineSeparator, follow: true, sleep: sleepDuration })
-
-tail.on('line', function(data) {
-  console.log("got new JSON:", data );
-
-  //Save the Data as an Alert if file is not truncated
-  if (data.indexOf('was cut') > -1 ){
-      console.log("Data was cut from the file:", data );
-  }
-  else
-  {
-    console.log("trying to save JSON:", data );
-    // TODO - Get the alerts to save
-    //alertHandler.save('alerts', alert, function(err,docs) {
-    //    if (err) { console.log('error:' + err); }
-    //    else { console.log('Alert created!' ); }
-    // });
-  }
-
-});
-
-tail.on('error', function(data) {
-  console.log("error:", data);
-});
 
 
 //---------------------------//
