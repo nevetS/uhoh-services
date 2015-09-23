@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>Uhoh, it's magic</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="packages/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="packages/font-awesome/css/font-awesome.min.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/stanford-wilbur.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+    <script src="http://legacy.datatables.net/extras/thirdparty/ColReorderWithResize/ColReorderWithResize.js"></script>
+    <script src="js/uhoh-data.js"></script>
+    <script src="js/colResizable-1.5.min.js"></script>
+    <script src="js/jquery.ui.position.js"></script>
+    <script src="js/jquery.contextMenu.js"></script>
+    <script src="js/jquery.bpopup.js"></script>
+    <script src="js/uhoh-code.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css" media="screen" />
+
+                        
+</head>
+
+<body>
+    <a class="sr-only" href="#content">Skip to content</a>
+    <div id="global-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="global-header-logo">
+                        <a href="http://www.stanford.edu">
+                            <img src="images/header-stanford-logo@2x.png" alt="Stanford University">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#global-header -->
+    <div id="wrap">
+        <div>
+        <div class="container"> 
+<!--
+            <div class="row">
+                <div id="header">
+                    <div class="col-md-12">
+                        <a href="http://www.stanford.edu">
+                            <img src="images/stanford-logo.png" class="site-logo" alt="Stanford University">
+                        </a>
+                        <div class="site-name">Application</div>
+                    </div>
+                </div>
+            </div>
+-->
+            <nav class="navbar navbar-default" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <but ton type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a> </li>
+                        <li><a href="#">Search</a> </li>
+                        <li><a href="#">Configure</a> </li>
+
+
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </nav>
+            <div class="row">
+                <div id="content" class="col-md-12">
+                  <!--Main Content Start-->
+                  
+<div>
+  <h4>Active Root Causes</h4>
+  <table width="100%" class="clickable cell-border table table-striped onerow" id="open">
+    <thead>
+      <tr>
+        <th>Sev</th>
+	<th>Ack</th>
+	<th>Owner</th>
+	<th>Class</th>
+	<th>Name</th>
+	<th>Event</th>
+	<th>Event Text</th>
+	<th>Source</th>
+	<th>Impact</th>
+	<th>Count</th>
+	<th>Last Change</th>
+	<th>First Notify</th>
+	<th>Clear on Ack</th>
+	<th>Event Type</th>
+	<th>Category</th>
+	<th width=0>ID</th>
+	</tr>
+      </thead>
+    </table>
+</div>
+<div class="row">
+    <div id="alertDetail" class="col-md-6 well">
+        <ul class="nav nav-tabs" role="tablist">
+	  <li class="active">
+	    <a href="#detail" role="tab" data-toggle="tab">
+	      <icon class="fa fa-home"></icon> Alert Detail</a>
+	  </li>
+	  <li><a href="#audit_trail" role="tab" data-toggle="tab">
+	      <icon class="fa fa-user"</icon> Audit Trail</a>
+	  </li>
+        </ul>
+      <div class="tab-content">
+          <div class="tab-pane fade active in" id="detail">
+            <table id="alertTable" cellspacing="15" cellpadding="15" border=0
+        	   class="" style="margin: 15px; padding: 15px">
+            </table>
+
+          </div>
+          <div class="tab-pane fade" id="audit_trail">
+	    <form>
+	      <div class="form-group">
+		<label for="new_audit_entry">Audit Log</label>
+		<textarea class="form-control" rows="4"></textarea>
+		<button type="submit" class="btn btn-default">Add to Audit
+		  Trail</button>
+	      </div>
+	      </form>
+	    <table class="table">
+	      <tbody>
+		<tr>
+		  <th>Time</th>
+		  <th>User ID</th>
+		  <th>Type</th>
+		  <th>Description</th>
+		  </tr>
+	      </tbody>
+	      
+	      </table>
+          
+          </div>
+      </div>
+</div>
+
+    <div class="col-md-6 well well2">
+        <h4>Scheduled Maintenance</h4>
+        <table width="100%" cellpadding="0" cellspacing="0" class="table clickable cell-border onerow" id="maintenance">
+          <thead>
+            <tr>	
+        	<th>Class</th>
+        	<th>Event</th>
+        	<th>Name</th>
+        	<th>Event Text</th>
+        	<th>Count</th>
+        	<th>Last Change</th>
+        	<th>id</th>
+            </thead>
+          </table>
+    </div>
+    
+</div>
+
+
+<div class="uhoh_pop" id="email_dialog">
+  <div class="form-group well bgwhite">
+        <form id="Notify" name="Notification" method="post">
+         <label for="textfield">To:</label>
+         <input type="text" name="textfield" id="To" class="form-control"/>
+         <label for="textfield2">Subject:</label>
+         <input type="text" name="textfield2" id="subject"
+		class="form-control"/>
+	 <label for="notifytext">Message:</label>
+         <textarea id="notification_text" cols="40" rows="6" name="notifytext"
+		   class="form-control"></textarea>
+	 <button type="button" class="btn btn-success btn-sm">Send</button>
+	</form>
+	<div class="clearfix"></div>
+	
+  </div>
+</div>
+
+
+<div>
+  <h4>All Notifications</h4>
+  <table width="100%" cellpadding="0" cellspacing="0" class="clickable cell-border onerow
+							     " id="allData">
+    <thead>
+      <tr>
+	<th>Acknowledged</th>
+	<th>Owner</th>
+	<th>Class</th>
+	<th>Name</th>
+	<th>Event</th>
+	<th>Event Text</th>
+	<th>Source</th>
+	<th>Impact</th>
+	<th>Count</th>
+	<th>Last Change</th>
+	<th>First Notify</th>
+	<th>Clear on Ack</th>
+	<th>Event Type</th>
+	<th>Category</th>
+	<th>ID</th>
+	</tr>
+      </thead>
+    </table>
+
+</div>
+
+		  <!--
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <div class="well instruction">
+                                <p>Vivamus in lacinia lorem. Duis commodo interdum elit, at tristique purus molestie id.</p>
+                                <p>Pellentesque tristique at eros sit amet vehicula. Mauris facilisis arcu ac nisl porttitor venenatis. Vivamus nec consectetur massa, nec pharetra libero. Nunc pharetra auctor eros non tempus.</p>
+                                <p class="center">
+                                    <a class="btn btn-success btn-lg" href="#">Proceed to next step</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+                    <!--Main Content End-->
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+        </div>
+        <!--/.container-->
+    </div>
+    <!--/.wrap-->
+    <div role="contentinfo" id="global-footer">
+        <div class="container">
+            <div class="row">
+                <div id="bottom-logo" class="col-xs-6 col-sm-2 col-md-2">
+                    <div class="global-footer-logo">
+                        <a href="http://www.stanford.edu" style="border: medium none;">
+                            <img alt="Stanford University" src="images/footer-stanford-logo@2x.png">
+                        </a>
+                    </div>
+                </div>
+                <div id="bottom-menu" class="col-xs-6 col-sm-10 col-md-10">
+                    <ul class="nav nav-inline">
+                        <li><a href="http://www.stanford.edu">SU Home</a></li>
+                        <li><a href="http://visit.stanford.edu/plan/maps.html">Maps &amp; Directions</a></li>
+                        <li><a href="http://www.stanford.edu/search/">Search Stanford</a></li>
+                        <li><a href="http://www.stanford.edu/site/terms.html">Terms of Use</a></li>
+                        <li><a href="http://emergency.stanford.edu">Emergency Info</a></li>
+                    </ul>
+                </div>
+                <div id="copyright" class="col-xs-12 col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2">
+                    <p class="copyright vcard">&copy;&nbsp; <span class="fn org">Stanford University</span>, <span class="adr"> <span class="locality">Stanford</span>, <span class="region">California</span> <span class="postal-code">94305</span>.</span>&nbsp; <span class="copyright-links"><a href="http://www.stanford.edu/group/security/dmca.html">Copyright Complaints</a> </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- 
+    <script type="text/javascript" src="js/jquery.js"></script>
+    -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script type="text/javascript" src="packages/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/stanford.js"></script>
+</body>
+
+</html>
