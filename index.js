@@ -8,13 +8,14 @@ var errorhandler = require('errorhandler');
 
 var AlertHandler = require('./AlertHandler');
 var http = require('http');
+var https = require('https');
+var fs = require('fs');
 var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var router = express.Router();
 //var config = require('./Config');
 var winston = require('winston');
-
 var nodemailer = require("nodemailer");
 
 //---------------------------//
@@ -25,13 +26,13 @@ var nodemailer = require("nodemailer");
 console.log("starting logger...");
 winston.add(winston.transports.File, {
   //filename: config.logger.api
-  filename: 'map.log'
+  filename: 'map.log',
 });
 
 // We will log all uncaught exceptions into exceptions.log
 winston.handleExceptions(new winston.transports.File({
         //filename: config.logger.exception
-        filename: 'exceptions.log'
+        filename: 'exceptions.log',
 }));
 
 //---------------------------//
@@ -42,9 +43,15 @@ app.use(bodyParser.json());
 app.use(methodOverride('_method'))
 app.use(express.static(__dirname + '/public'));
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8443);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+// This line is from the Node.js HTTPS documentation.
+var options = {
+    key: fs.readFileSync('ssl/keys/dsi-tools.key'),
+    cert: fs.readFileSync('ssl/certs/dsi-tools.cert')
+};
 
 app.use(errorhandler({ dumpExceptions: true, showStack: true }));
 
@@ -54,9 +61,11 @@ app.use(errorhandler({ dumpExceptions: true, showStack: true }));
 var MongoClient = require('mongodb').MongoClient;
 var Db = require('mongodb').Db;
 var Server = require('mongodb').Server;
-var assert = require('assert');
+var assert = require('assert')
 var ObjectId = require('mongodb').ObjectID;
-var url = 'mongodb://appsupp-mongodb.cluster.local:27017/test';
+//var url = 'mongodb://localhost:27017/test';
+//var url = 'mongodb://map-handler:MapsAndM0ngoose@dsi-tools.stanford.edu:27017/test?ssl=true';
+var url = 'mongodb://map-handler:MapsAndM0ngoose@dsi-tools.stanford.edu:27017/test';
 var alertHandler;
 
 MongoClient.connect(url, function(err, db) {
@@ -182,7 +191,7 @@ app.use(function (req,res) {
     res.render('404', {url:req.url});
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+https.createServer(options,app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 

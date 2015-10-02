@@ -18,6 +18,7 @@ AlertHandler.prototype.findAll = function(collectionName, callback) {
 };
 
 AlertHandler.prototype.getCollection = function(collectionName, callback) {
+//    console.log("Collection target is: " + collectionName);
   this.db.collection(collectionName, function(error, the_collection) {
     if( error ) callback(error);
     else callback(null, the_collection);
