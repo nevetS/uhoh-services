@@ -25,13 +25,13 @@ var nodemailer = require("nodemailer");
 console.log("starting logger...");
 winston.add(winston.transports.File, {
   //filename: config.logger.api
-  filename: 'map.log',
+  filename: 'map.log'
 });
 
 // We will log all uncaught exceptions into exceptions.log
 winston.handleExceptions(new winston.transports.File({
         //filename: config.logger.exception
-        filename: 'exceptions.log',
+        filename: 'exceptions.log'
 }));
 
 //---------------------------//
@@ -54,9 +54,9 @@ app.use(errorhandler({ dumpExceptions: true, showStack: true }));
 var MongoClient = require('mongodb').MongoClient;
 var Db = require('mongodb').Db;
 var Server = require('mongodb').Server;
-var assert = require('assert')
+var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-var url = 'mongodb://localhost:27017/test';
+var url = 'mongodb://appsupp-mongodb.cluster.local:27017/test';
 var alertHandler;
 
 MongoClient.connect(url, function(err, db) {
