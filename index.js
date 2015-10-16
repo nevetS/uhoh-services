@@ -18,6 +18,9 @@ var router = express.Router();
 var winston = require('winston');
 var nodemailer = require("nodemailer");
 
+
+var confContents = fs.readFileSync('conf/config.json');
+var conf = JSON.parse(confContents);
 //---------------------------//
 //Setup Logging
 //---------------------------//
@@ -26,21 +29,23 @@ var nodemailer = require("nodemailer");
 console.log("starting logger...");
 winston.add(winston.transports.File, {
   //filename: config.logger.api
-  filename: 'map.log',
+  filename: 'map.log'
 });
 
 // We will log all uncaught exceptions into exceptions.log
 winston.handleExceptions(new winston.transports.File({
         //filename: config.logger.exception
-        filename: 'exceptions.log',
+        filename: 'exceptions.log'
 }));
 
 //---------------------------//
 //Setup Express
 //---------------------------//
+
+
 var app = express();
 app.use(bodyParser.json()); 
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
 app.use(express.static(__dirname + '/public'));
 
 app.set('port', process.env.PORT || 3000);
@@ -61,11 +66,16 @@ app.use(errorhandler({ dumpExceptions: true, showStack: true }));
 var MongoClient = require('mongodb').MongoClient;
 var Db = require('mongodb').Db;
 var Server = require('mongodb').Server;
-var assert = require('assert')
+var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 //var url = 'mongodb://localhost:27017/test';
 //var url = 'mongodb://map-handler:MapsAndM0ngoose@dsi-tools.stanford.edu:27017/test?ssl=true';
-var url = 'mongodb://map-handler:MapsAndM0ngoose@dsi-tools.stanford.edu:27017/test';
+var url = 'mongodb://'+conf.db.user+':'+conf.db.secret+'@'+conf.db.server+':'+conf.db.port+'/';
+url += conf.db.database;
+if ('options' in conf.db){
+    url += '?' + conf.db.options;
+}
+//var url = 'mongodb://map-handler:appsup-mongodb.cluster.local:27017/test';
 var alertHandler;
 
 MongoClient.connect(url, function(err, db) {
@@ -171,8 +181,9 @@ function sendEmail(mailDetails){
       if(error){
           return console.log(error);
       }  else {
-          console.log('Message sent: ' + info.response)
+          console.log('Message sent: ' + info.response);
       };
+      return null;
  });
 
 }

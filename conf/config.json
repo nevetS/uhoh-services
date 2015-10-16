@@ -1,0 +1,12 @@
+{
+    "db" : {
+	"user": "dbuser",
+	"secret": "dbsecret",
+	"host": "dbserver",
+	"port": 27017,
+	"database": "test",
+	"notes": "you can add a key here: 'options'",
+	"notes": "any options will be appended to the mongo connection",
+	"notes": "string.  (for instance ssl=true)"
+    }
+}
