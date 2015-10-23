@@ -19,7 +19,7 @@ var winston = require('winston');
 var nodemailer = require("nodemailer");
 
 
-var confContents = fs.readFileSync('conf/config.json');
+var confContents = fs.readFileSync('/opt/uhoh/conf/config.json');
 var conf = JSON.parse(confContents);
 //---------------------------//
 //Setup Logging
