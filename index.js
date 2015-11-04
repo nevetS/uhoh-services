@@ -70,7 +70,11 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 //var url = 'mongodb://localhost:27017/test';
 //var url = 'mongodb://map-handler:MapsAndM0ngoose@dsi-tools.stanford.edu:27017/test?ssl=true';
-var url = 'mongodb://'+conf.db.user+':'+conf.db.secret+'@'+conf.db.server+':'+conf.db.port+'/';
+var creds = "";
+if (typeof(conf.db.user) != "undefined" && conf.db.user != ""){
+    creds = conf.db.user + ':' + conf.db.secret + '@';
+}
+var url = 'mongodb://'+creds+conf.db.server+':'+conf.db.port+'/';
 url += conf.db.database;
 if ('options' in conf.db){
     url += '?' + conf.db.options;
