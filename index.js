@@ -19,8 +19,9 @@ var winston = require('winston');
 var nodemailer = require("nodemailer");
 
 
-var confContents = fs.readFileSync('/opt/uhoh/conf/config.json');
-var conf = JSON.parse(confContents);
+//var confContents = fs.readFileSync('/opt/uhoh/conf/config.json');
+//var conf = JSON.parse(confContents);
+var conf = require('./conf/config')['docker'];
 //---------------------------//
 //Setup Logging
 //---------------------------//
@@ -52,11 +53,7 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// This line is from the Node.js HTTPS documentation.
-var options = {
-    key: fs.readFileSync('ssl/keys/dsi-tools.key'),
-    cert: fs.readFileSync('ssl/certs/dsi-tools.cert')
-};
+
 
 app.use(errorhandler({ dumpExceptions: true, showStack: true }));
 
@@ -79,6 +76,7 @@ url += conf.db.database;
 if ('options' in conf.db){
     url += '?' + conf.db.options;
 }
+console.log('mongo url is: ' + url);
 //var url = 'mongodb://map-handler:appsup-mongodb.cluster.local:27017/test';
 var alertHandler;
 
@@ -101,6 +99,16 @@ app.post('/mail',function(req, res) {
 
 });
 
+app.get('/clear/:collection'), function(req,res){
+    console.log('clearing ' + collection);
+    alertHandler.clear(collection, function(error, objs){
+			   if(error){res.send(400,error);}
+                           else {
+                               res.send(200,ok);			       
+			   }
+		       });
+};
+
 //Get all the data
 app.get('/:collection', function(req, res) { 
    var params = req.params; 
@@ -117,6 +125,7 @@ app.get('/:collection', function(req, res) {
         });
 });
 
+
 //Create a new item in the collection
 app.post('/:collection', function(req, res) { 
     var object = req.body;
@@ -126,7 +135,6 @@ app.post('/:collection', function(req, res) {
           else { res.send(201, docs); } 
      });
 });
-
 
 //Change/update the item in the collection
 app.put('/:collection/:entity', function(req, res) { 
@@ -206,7 +214,7 @@ app.use(function (req,res) {
     res.render('404', {url:req.url});
 });
 
-https.createServer(options,app).listen(app.get('port'), function(){
+https.createServer(conf.ssl.options,app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
