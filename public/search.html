@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Sentinel</title>
+    <title>Sentinel - search</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
@@ -29,13 +29,11 @@
     <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
     <script src="js/nouislider.js"></script>
     <script src="js/buzz.js"></script>
-    <script src="js/jquery.datetimepicker.js"></script>    
-    <script src="js/uhoh-code.js"></script>
+    <script src="js/uhoh-search.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.7/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css" media="screen" />
-        
+    <link rel="stylesheet" type="text/css" href="css/nouislider.min.css" media="screen" />
 
                         
 </head>
@@ -58,18 +56,6 @@
     <!-- /#global-header -->
     <div id="wrap">
         <div class="container"> 
-<!--
-            <div class="row">
-                <div id="header">
-                    <div class="col-md-12">
-                        <a href="http://www.stanford.edu">
-                            <img src="images/stanford-logo.png" class="site-logo" alt="Stanford University">
-                        </a>
-                        <div class="site-name">Application</div>
-                    </div>
-                </div>
-            </div>
--->
             <nav class="navbar navbar-default" role="navigation">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -89,17 +75,14 @@
             </nav>
             <div class="row">
                 <div id="content" class="col-md-12">                  <!--Main Content Start-->
-                  <div id="sentinel">
-  </div>
-
-<div class="rf"><center><b>Legend</b></center><br/>
+                  <div class="rf"><center><b>Legend</b></center><br/>
   <span class="danger">  <i class="fa fa-fire red"></i> Sev 1</span>
   <span class="op"> <i class="fa fa-bolt"></i> Sev 2</span>
   <span class="warning"> <i class="fa fa-exclamation-triangle"></i> Sev 3</span>
   <span class="info"> <i class="fa fa-times-circle"></i> Sev 4</span>  						     
 </div>
 <div>
-  <h4>Active Root Causes</h4>
+  <h4>All Root Causes</h4>
   <table width="100%" class="clickable cell-border table table-striped onerow" id="open">
     <thead>
       <tr>
@@ -124,7 +107,7 @@
     </table>
 </div>
 <div class="row">
-    <div id="alertDetail" class="col-md-6 well"><a name="anchorDetail"></a>
+    <div id="alertDetail" class="col-md-6 well">
         <ul class="nav nav-tabs" role="tablist">
 	  <li class="active">
 	    <a href="#detail" role="tab" data-toggle="tab">
@@ -175,7 +158,6 @@
         	<th>Name</th>
         	<th>Event Text</th>
         	<th>Count</th>
-		<th>Expire</th>
         	<th>Last Change</th>
         	<th>id</th>
             </thead>
@@ -201,14 +183,6 @@
 	</form>
 	<div class="clearfix"></div>
 	
-  </div>
-</div>
-<div class="uhoh_pop" id="maintenance_dialog">
-  <div class="form-group well bgwhite">
-  <h3>Set In-Maintenance Expiration</h3>
-  <input id="datetimepicker" type="text" >
-  <button type="button" class="btn btn-success btn-sm"
-	  id="mntsavebutton">Save</button>
   </div>
 </div>
 

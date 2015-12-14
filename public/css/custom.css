@@ -73,9 +73,70 @@ table.onerow td {
 tr.selected {
     font-weight: bold;
 }
-clickable {
+.clickable {
                user-select: none; /* CSS3 (little to no support) */
         -ms-user-select: none; /* IE 10+ */
        -moz-user-select: none; /* Gecko (Firefox) */
     -webkit-user-select: none; /* Webkit (Safari, Chrome) */
+}
+
+tr.danger > td {
+ background-color:  #F59D9D !important;    
+}
+tr.selected.danger > td {
+    
+ background-color:  #F17474 !important;
+}
+tr.selected.op > td {
+ background-color:  #FFD191 !important;    
+}
+tr.selected.warning > td {
+ background-color:  #FFF3B5 !important;    
+}
+tr.selected.info > td {
+ background-color: #B9E4FA !important;    
+}
+.rf{
+    display: block;
+    float: right;
+    width: 225px;
+}
+span.danger{
+    
+    background-color: #f59d9d !important;
+    display: block;
+}
+span.op{
+    background-color: #ffd191 !important;
+    display: block;
+}
+span.warning{
+    background-color: #fcf8e3 !important;
+    display: block;
+}
+span.info{
+    background-color: #d9edf7 !important;
+    display: block;
+}
+
+.rf>span{
+ width: 55px;
+ float: left;
+ padding-left: 5px;
+}
+
+table#config-table td {
+    padding: 2em;
+    }
+table#config-table td>select{
+    height: 13em;
+}
+
+#sentinel {
+    background-image: url("/images/x_men_month_sentinels_sotd_by_ratkins-d49szhx.png");
+    height: 138px;
+    width: 100px;
+    float: right;
+    clear: right;
+    margin-top: -50px;
 }

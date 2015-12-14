@@ -27,7 +27,6 @@ var socket = {};
 var sounds = [];
 var soundgroup;
 var soundcount = 0;
-var holders = {};
 //TODO: pull this from the environment
 //TODO: script build to adjust this per environment
 iam = 'stevenk1';
@@ -129,7 +128,7 @@ function parseAlerts(results){
 		   value['status'] == 'clear'
 		 ){
                      //skip to next iteration
-		     return true;
+	//	     return true;
 		 }
 	       if( value.hasOwnProperty('_id') &&  
 		   seen.indexOf(value['_id']) >= 0
@@ -232,15 +231,12 @@ function auditAdd(who,what,when){
 function doPoll(){
 //poll the server for new alerts
     $.ajax({
-           url: '/api/data/1.1/active/alerts/alerts',
+           url: '/api/data/1.1/alerts/alerts',
            //url: 'alerts.js',
            headers: {Accept : "text/plain; charset=utf-8"},
            success: parseAlerts
            
     });
-    if (!(mode == 'development')){
-	setTimeout(doPoll,30000000);	
-    }
 
 }
 function findAlertq(query){
@@ -280,48 +276,21 @@ function expand(){
 
 function doMaintenance(id, cell){
     console.log("putting host into maintenance");
-
     var row = findAlert(id)[0];
     row['event'] = 'InMaint';
-    console.log('opening configuration dialog');
-    popupthing = $('#maintenance_dialog').bPopup();	
-    $('#datetimepicker').datetimepicker({mask: true,
-					lang: 'en',
-					format: 'm/d/Y H:i',
-					timepicker: true,
-					datepicker: true});
-    holders['id'] = id;
-    holders['cell'] = cell;
-    holders['popup'] = popupthing;
-    // var m = maintenancetable.DataTable();
-    // m.row.add(row);
-    // maintenanceData.push(row);
-    // removeByID(openData, id);
-    // var tableRow = $(cell).parent();
-    // tableRow.addClass('deleteme');
-    // updateRow(row);
-    // redrawTables();
-}
-function doMaintenancePartTwo(){
-    console.log('doing part two');
-    var id = holders['id'];
-    var cell = holders['cell'];
-    var row = findAlert(id)[0];
-    var popupthing = holders['popup'];
-    popupthing.close();
-    row['event'] = 'InMaint';
-    row['expire'] = $('#datetimepicker').val();
-
     var m = maintenancetable.DataTable();
     m.row.add(row);
+//    var d = m.data();
+//    d.push(row);
+//    d.rows().invalidate().draw();
     maintenanceData.push(row);
     removeByID(openData, id);
     var tableRow = $(cell).parent();
     tableRow.addClass('deleteme');
     updateRow(row);
     redrawTables();
-
 }
+
 function doClear(id, cell){
     var row = findAlert(id)[0];
     row['status'] = 'clear';
@@ -393,9 +362,7 @@ function countActive(){
 function doSocket(){
     var url = window.location.protocol + '//' + window.location.hostname+(location.port ? ':'+location.port: '') + "/"; 
     
-    socket = io.connect(url, {
-    transports: ['polling']
-});
+    socket = io.connect(url);
     console.log('connecting to socket at ' + url);
 //    io.set("polling duration", 10);
 //    io.set("close timeout", 30);
@@ -408,7 +375,6 @@ function doSocket(){
 		  console.log(data);
                   var mAdd = 0;
                   var oAdd = false;
-                  var oClr = false;
 		  if('event' in data){
 		      if(data['event'] == 'InMaint'){
 			  mAdd = mergeClassNameEvent(maintenanceData, [data]);
@@ -417,15 +383,9 @@ function doSocket(){
 			  mergeClassNameEvent(openData, [data]);
 			  if (acb < countActive()){
 			      oAdd = true;
-			  }else if (acb > countActive()){
-			      oClr = true;
-
 			  }
 			  if(oAdd){
 			      newOpenData();  
-			  } else if(oClr){
-                              $("tr:has(td:contains(" +data['_id'] + "))").addClass('deleteme');
-			      redrawTables();
 			  } else {
 			      var updated = findAlertq(data);
 			      highlightCount(updated);
@@ -478,10 +438,10 @@ function doDetail(id){
         if (key == 'auditLog'){
             console.log('doing audit');
             if($.isArray(myobj[key])) {
-                var counter = 0;
+		var counter = 0;
 		$.each(myobj['auditLog'], function(index,obj){
+			   counter +=1
 			   auditAdd(obj['who'],obj['what'],obj['when']);					   
-                           counter += 1;
 			   if (counter > 100){
 			       return false;
 			   }
@@ -540,9 +500,7 @@ function releaseOwnership(id){
     updateRow(row[0]);
 }
 
-function padLeft(nr, n, str){
-    return Array(n-String(nr).length+1).join(str||'0')+nr;
-}
+
 function updateRow(row){
     var url = "/api/data/1.1/alerts/alerts/" + row['_id'];
     var date = new Date();
@@ -551,8 +509,8 @@ function updateRow(row){
     var year = date.getFullYear();
     var hour = date.getHours();
     var min = date.getMinutes();
-//    var when = day + '/' + day + '/' + year + " " + hour + ':' + min;
-    var when = day + '/' + day + '/' + (year-2000) + " " + padLeft(hour,2,'0') + ':' + padLeft(min,2,'0');
+    var when = day + '/' + day + '/' + year + " " + hour + ':' + min;
+
 
     row['LastChange'] = when;
 
@@ -660,7 +618,6 @@ function doTables(){
     if (tablesdone == true){
 	return;
     }
-    console.log('doing tables');
     opentable = $("#open").dataTable( {
 	    "data": openData,
             "columns": [
@@ -722,11 +679,6 @@ function doTables(){
         });
 
         $(".clickable tbody").on( 'click', 'tr', selectFun);
-
-    $(".clickable tbody").on( 'dblclick', 'tr', function(){
-			     location.hash = "#anchorDetail" ;
-			  });
-
            // function (e) {
 	   //  console.log('clicked row number ' + ($(this).index() + 1));
            //  if ( $(this).hasClass('selected') ) {
@@ -756,11 +708,6 @@ function doTables(){
 
             { "data" : "text"},
             { "data" : "count"},
-	    { "data" : "expire",
-              "render": function (data, type, row ){
-		            if (data ) { return data;} 
-		            else { return "indefinite";}
-		       }},
             { "data" : "LastChange"},
             { "data" : "_id"}
 ],
@@ -818,7 +765,6 @@ function initialize_sliders(){
 function init(){
     //initialization routines
     doPoll();
-    $('#mntsavebutton').on('click', doMaintenancePartTwo);
     $('#auditadd').on('click', function(e){
 			  e.preventDefault();
 			  d = new Date();
@@ -941,14 +887,14 @@ function init(){
 
 		     },
 		     items: {
-			 "clear":{name: "Clear Alert", icon: "cut"},
+//			 "clear":{name: "Clear Alert", icon: "cut"},
 			 "notify": {name: "Send Notification", icon: "edit"},
-			 "ack": {name: "Acknowledge", icon: " fa fa-check"},
-			 "unack": {name:"Unacknowledge", icon: "cut" },
-			 "own": {name: "Take Ownership", icon: "cut" },
-			 "unown": {name: "Release Ownership", icon: "cut" },
-			 "audit": {name: "Add to Audit Log", icon: "cut" },
-			 "inmaint":{name: "Put In Maintenance", icon: "cut"}
+//			 "ack": {name: "Acknowledge", icon: "cut"},
+//			 "unack": {name:"Unacknowledge", icon: "cut" },
+//			 "own": {name: "Take Ownership", icon: "cut" },
+//			 "unown": {name: "Release Ownership", icon: "cut" },
+			 "audit": {name: "Add to Audit Log", icon: "cut" }
+//			 "inmaint":{name: "put in maintenance", icon: "cut"}
 
 		     }
 		 });
@@ -980,14 +926,13 @@ function init(){
 		      }
 		  });
 
-
     $('#config-link').on('click', null, pop_config);
     initialize_sliders();
     sounds.push(new buzz.sound('/sounds/click.wav'));
     sounds.push(new buzz.sound('/sounds/ding.wav'));
     sounds.push(new buzz.sound('/sounds/ohno.wav'));
     soundgroup = new buzz.group(sounds[0], sounds[1], sounds[2]);
-    doSocket();
+ //   doSocket();
 
 }
 
